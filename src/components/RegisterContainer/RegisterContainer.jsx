@@ -45,11 +45,34 @@ export default function RegisterContainer() {
         setStep(2);
     };
 
-    const handleFinalSubmit = (e) => {
+    const handleFinalSubmit = async (e) => {
         e.preventDefault();
-        console.log('Usuário cadastrado com:', form);
-        alert('Cadastro completo (simulado)');
-        navigate('/login');
+
+        try {
+            const formData = new FormData();
+            formData.append('username', form.name);
+            formData.append('email', form.email);
+            formData.append('dataNascimento', form.dataNascimento);
+            if (form.foto) formData.append('foto', form.foto);
+
+            const response = await fetch('http://localhost:3001/register', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                alert(data.error || 'Erro ao cadastrar usuário');
+                return;
+            }
+
+            alert('Usuário cadastrado com sucesso!');
+            navigate('/login');
+        } catch (error) {
+            console.error('Erro:', error);
+            alert('Erro na comunicação com o servidor');
+        }
     };
 
     return (
