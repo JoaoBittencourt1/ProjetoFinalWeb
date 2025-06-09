@@ -1,20 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LoginContainer from './components/Logincontainer/Logincontainer';
+import RegisterContainer from './components/RegisterContainer/RegisterContainer';
 
-import CadastroUsuario from './componentes/CadastroUsuario';
-
-function App() {
+export default function App() {
     return ( <
-        div className = "App" >
+        Router >
         <
-        header className = "App-header" >
+        Routes >
         <
-        CadastroUsuario / >
-        <
-        /header> < /
-        div >
+        Route path = "/login"
+        element = { < LoginContainer / > }
+        /> <
+        Route path = "/register"
+        element = { < RegisterContainer / > }
+        /> <
+        Route path = "*"
+        element = { < LoginContainer / > }
+        /> < /
+        Routes > <
+        /Router>
     );
 }
-
-
-export default App;
