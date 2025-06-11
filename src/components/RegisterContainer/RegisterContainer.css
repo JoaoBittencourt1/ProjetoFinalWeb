@@ -108,3 +108,12 @@ h2 {
     object-fit: cover;
     border: 2px solid #667eea;
 }
+
+.error-message {
+    color: #ff0000;
+    background-color: #ffe6e6;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    text-align: center;
+}
