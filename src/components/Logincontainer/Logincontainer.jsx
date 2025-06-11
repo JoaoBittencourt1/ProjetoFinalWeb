@@ -48,7 +48,15 @@ export default function LoginContainer() {
                         Criar Nova Conta
                     </button>
                 </form>
+                <button
+                type="button"
+                className="prototype-button"
+                onClick={() => navigate('/home-prototype')}
+            >
+                Ir para protótipo
+            </button>
             </div>
         </div>
+        
     );
 }

@@ -94,3 +94,19 @@ h2 {
     align-items: center;
     justify-content: center;
 }
+
+.prototype-button {
+    margin-top: 1rem;
+    width: 100%;
+    padding: 0.75rem;
+    background: #444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.prototype-button:hover {
+    background: #222;
+}
