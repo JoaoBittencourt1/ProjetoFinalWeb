@@ -12,4 +12,6 @@
 ### backend: 
 
 - cd backend
+- npm install
+- npm install multer
 - node index.js

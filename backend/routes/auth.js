@@ -1,7 +1,9 @@
+console.log('Arquivo de rotas de autenticação carregado');
 const express = require('express');
 const router = express.Router();
 const mysql = require('mysql2/promise');
-
+const multer = require('multer');
+const path = require('path');
 
 const dbConfig = {
   host: '179.251.251.198',
@@ -10,6 +12,65 @@ const dbConfig = {
   database: 'ProjetoWeb'
 };
 
+// Configure multer for file upload
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage: storage });
+
+// Registration route
+router.post('/register', upload.single('foto'), async (req, res) => {
+  try {
+    const { username, email, senha, dataNascimento } = req.body;
+    const foto = req.file ? req.file.filename : null;
+
+    // Validate required fields
+    if (!username || !email || !senha || !dataNascimento) {
+      return res.status(400).json({ error: 'Todos os campos obrigatórios devem ser preenchidos' });
+    }
+
+    const connection = await mysql.createConnection(dbConfig);
+
+    // Check if email or username already exists
+    const [existingUsers] = await connection.execute(
+      'SELECT * FROM usuarios WHERE email = ? OR username = ?',
+      [email, username]
+    );
+
+    if (existingUsers.length > 0) {
+      await connection.end();
+      return res.status(400).json({ error: 'Email ou nome de usuário já cadastrado' });
+    }
+
+    // Insert new user
+    const [result] = await connection.execute(
+      'INSERT INTO usuarios (username, email, senha, data_nascimento, foto_perfil) VALUES (?, ?, ?, ?, ?)',
+      [username, email, senha, dataNascimento, foto]
+    );
+
+    await connection.end();
+
+    // Send success response
+    return res.status(201).json({ 
+      success: true,
+      message: 'Usuário cadastrado com sucesso' 
+    });
+
+  } catch (error) {
+    console.error('Erro no registro:', error);
+    // Retorne erro como JSON
+    return res.status(500).json({ 
+      success: false,
+      error: error.message || 'Erro ao cadastrar usuário' 
+    });
+  }
+});
 
 router.post('/login', async (req, res) => {
   try {

@@ -47,26 +47,35 @@ export default function RegisterContainer() {
   const handleFinalSubmit = async (e) => {
     e.preventDefault();
     setError('');
-
+  
     try {
       const formData = new FormData();
-      formData.append('username', form.name); 
+      formData.append('username', form.name);
       formData.append('email', form.email);
-      formData.append('senha', form.password); 
+      formData.append('senha', form.password);
       formData.append('dataNascimento', form.dataNascimento);
       if (form.foto) formData.append('foto', form.foto);
-
-      const response = await fetch('http://localhost:3001/register', {
+  
+      const response = await fetch('http://localhost:3001/api/auth/register', {
         method: 'POST',
         body: formData,
+        credentials: 'include'
       });
-
+  
+      // Verifique o tipo de conteúdo antes de tentar parsear JSON
+      const contentType = response.headers.get('content-type');
+      
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text();
+        throw new Error(text || 'Resposta inválida do servidor');
+      }
+  
       const data = await response.json();
-
+  
       if (!response.ok) {
         throw new Error(data.error || 'Erro ao cadastrar usuário');
       }
-
+  
       alert('Usuário cadastrado com sucesso!');
       navigate('/login');
     } catch (error) {
