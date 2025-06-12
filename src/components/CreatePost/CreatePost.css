@@ -1,0 +1,96 @@
+.create-post {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.post-type-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.type-button {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #e4e6eb;
+    border-radius: 4px;
+    background: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.type-button.active {
+    background-color: #e7f3ff;
+    border-color: #1877f2;
+    color: #1877f2;
+}
+
+textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 12px;
+    border: 1px solid #e4e6eb;
+    border-radius: 4px;
+    resize: vertical;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #1877f2;
+}
+
+.image-upload {
+    margin-bottom: 15px;
+}
+
+.image-upload input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px dashed #e4e6eb;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.image-preview {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #1877f2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.submit-button:hover {
+    background-color: #166fe5;
+}
+
+.submit-button:disabled {
+    background-color: #e4e6eb;
+    cursor: not-allowed;
+}
+
+.error {
+    color: #dc3545;
+    background-color: #f8d7da;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-size: 14px;
+} 

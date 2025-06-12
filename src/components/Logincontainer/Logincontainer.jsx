@@ -19,6 +19,7 @@ export default function LoginContainer() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                credentials: 'include',
                 body: JSON.stringify({ email, password }),
             });
 
@@ -28,10 +29,9 @@ export default function LoginContainer() {
                 throw new Error(data.message || 'Erro ao fazer login');
             }
 
-            // Salvar dados do usuário no localStorage
+
             localStorage.setItem('user', JSON.stringify(data.user));
-            
-            // Redirecionar para o HomePrototype
+
             navigate('/home-prototype');
         } catch (err) {
             setError(err.message);

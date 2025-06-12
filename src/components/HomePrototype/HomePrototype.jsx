@@ -1,36 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import PostList from '../PostList/PostList';
 import './HomePrototype.css';
 
 export default function HomePrototype() {
-    const [showProfile, setShowProfile] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+  const [user, setUser] = useState(null);
 
-    const mockUser = {
-        name: "Usuário Exemplo",
-        email: "usuario@exemplo.com",
-        profilePic: "https://via.placeholder.com/50"
-    };
+  useEffect(() => {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      const parsedUser = JSON.parse(userData);
+      setUser({
+        name: parsedUser.username,
+        email: parsedUser.email,
+        profilePic: parsedUser.foto_perfil 
+          ? `http://localhost:3001/uploads/${parsedUser.foto_perfil}`
+          : 'https://via.placeholder.com/50'
+      });
+    }
+  }, []);
 
-    return (
-        <div className="home-wrapper">
-            <header className="header">
-                <button className="home-button">🏠 Home</button>
-                <div className="profile-section">
-                    <button className="profile-toggle" onClick={() => setShowProfile(!showProfile)}>
-                        👤
-                    </button>
-                    {showProfile && (
-                        <div className="profile-dropdown">
-                            <img src={mockUser.profilePic} alt="Foto de perfil" />
-                            <p><strong>{mockUser.name}</strong></p>
-                            <p>{mockUser.email}</p>
-                        </div>
-                    )}
-                </div>
-            </header>
-            <main className="main-content">
-                <h1>Bem-vindo à rede social!</h1>
-                <p>Essa é uma tela inicial fictícia que será integrada ao projeto futuramente.</p>
-            </main>
+  return (
+    <div className="home-wrapper">
+      <header className="header">
+        <button className="home-button">🏠 Home</button>
+        <div className="profile-section">
+          <button className="profile-toggle" onClick={() => setShowProfile(!showProfile)}>
+            {user?.profilePic ? (
+              <img 
+                src={user.profilePic} 
+                alt="Foto de perfil" 
+                className="profile-pic"
+              />
+            ) : (
+              '👤'
+            )}
+          </button>
+          {showProfile && user && (
+            <div className="profile-dropdown">
+              <img 
+                src={user.profilePic} 
+                alt="Foto de perfil" 
+                className="profile-dropdown-pic"
+              />
+              <p><strong>{user.name}</strong></p>
+              <p>{user.email}</p>
+            </div>
+          )}
         </div>
-    );
+      </header>
+      <main className="main-content">
+        <PostList />
+      </main>
+    </div>
+  );
 }

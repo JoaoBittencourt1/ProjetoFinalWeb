@@ -50,9 +50,9 @@ export default function RegisterContainer() {
 
     try {
       const formData = new FormData();
-      formData.append('username', form.name); // nome do campo no backend
+      formData.append('username', form.name); 
       formData.append('email', form.email);
-      formData.append('senha', form.password); // senha em texto plano
+      formData.append('senha', form.password); 
       formData.append('dataNascimento', form.dataNascimento);
       if (form.foto) formData.append('foto', form.foto);
 
