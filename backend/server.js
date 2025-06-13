@@ -80,10 +80,11 @@ const dbConfig = {
 
 const authRoutes = require('./routes/auth');
 const postsRoutes = require('./routes/posts');
-
+const comentariosRoutes = require('./routes/comentarios');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postsRoutes);
+app.use('/api/comentarios', comentariosRoutes);
 
 
 app.get('/', (req, res) => {

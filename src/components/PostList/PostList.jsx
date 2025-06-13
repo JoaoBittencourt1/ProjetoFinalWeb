@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CreatePost from '../CreatePost/CreatePost';
+import CommentSection from '../CommentSection/CommentSection'; // Corrigido aqui
 import './PostList.css';
 
 export default function PostList() {
@@ -67,8 +68,9 @@ export default function PostList() {
                         <button className="action-button">💬 Comentar</button>
                         <button className="action-button">↗️ Compartilhar</button>
                     </div>
+                    <CommentSection postId={post.id} /> {/* Aqui incluímos os comentários */}
                 </div>
             ))}
         </div>
     );
-} 
+}
