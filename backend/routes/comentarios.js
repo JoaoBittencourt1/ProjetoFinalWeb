@@ -11,7 +11,7 @@ const dbConfig = {
 };
 
 // Buscar comentários por ID do post
-router.get('/:postId', async (req, res) => {
+router.get('/:postId', async(req, res) => {
     try {
         const { postId } = req.params;
         const connection = await mysql.createConnection(dbConfig);
@@ -31,7 +31,7 @@ router.get('/:postId', async (req, res) => {
 });
 
 // Criar um novo comentário
-router.post('/', async (req, res) => {
+router.post('/', async(req, res) => {
     try {
         const { id_postagem, conteudo } = req.body;
         const userId = req.session.userId;
@@ -42,8 +42,7 @@ router.post('/', async (req, res) => {
 
         const connection = await mysql.createConnection(dbConfig);
         await connection.execute(
-            'INSERT INTO comentarios (id_usuario, id_postagem, conteudo) VALUES (?, ?, ?)',
-            [userId, id_postagem, conteudo]
+            'INSERT INTO comentarios (id_usuario, id_postagem, conteudo) VALUES (?, ?, ?)', [userId, id_postagem, conteudo]
         );
         await connection.end();
 

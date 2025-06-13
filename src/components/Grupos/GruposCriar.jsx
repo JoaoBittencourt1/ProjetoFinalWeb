@@ -7,17 +7,31 @@ export default function GruposCriar() {
   const [descricao, setDescricao] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const novoGrupo = {
-      nome,
-      descricao,
-      dataCriacao: new Date().toISOString()
-    };
+    try {
+      const response = await fetch('http://localhost:3001/api/grupos/criar', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // importante para manter a sessão
+        body: JSON.stringify({ nome, descricao }),
+      });
 
-    console.log('Grupo criado:', novoGrupo);
-    navigate('/grupos'); // Voltar para o menu de grupos
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log('Grupo criado com sucesso:', data);
+        navigate('/grupos'); // Navegar para a lista de grupos
+      } else {
+        alert(data.message || 'Erro ao criar grupo');
+      }
+    } catch (error) {
+      console.error('Erro ao conectar com o servidor:', error);
+      alert('Erro de conexão com o servidor');
+    }
   };
 
   return (
@@ -25,10 +39,19 @@ export default function GruposCriar() {
       <h2>Criar Novo Grupo</h2>
       <form className="grupo-criar-form" onSubmit={handleSubmit}>
         <label>Nome do grupo:</label>
-        <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} required />
+        <input
+          type="text"
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
+          required
+        />
 
         <label>Descrição:</label>
-        <textarea value={descricao} onChange={(e) => setDescricao(e.target.value)} required />
+        <textarea
+          value={descricao}
+          onChange={(e) => setDescricao(e.target.value)}
+          required
+        />
 
         <button type="submit">Criar Grupo</button>
       </form>
