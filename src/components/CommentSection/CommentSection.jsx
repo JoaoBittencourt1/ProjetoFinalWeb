@@ -53,20 +53,27 @@ export default function CommentSection({ postId }) {
                 <button type="submit">Comentar</button>
             </form>
             <div className="comments-list">
-                {comments.map(comment => (
-                    <div key={comment.id} className="comment">
-                        <img
-                            src={comment.foto_perfil ? `http://localhost:3001/uploads/${comment.foto_perfil}` : 'https://via.placeholder.com/30'}
-                            alt="User"
-                            className="comment-avatar"
-                        />
-                        <div className="comment-body">
-                            <strong>{comment.username}</strong>
-                            <p>{comment.conteudo}</p>
-                        </div>
-                    </div>
-                ))}
-            </div>
+  {comments.map(comment => (
+    <div key={comment.id} className="comment" style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+      <img
+        src={comment.foto_perfil ? `http://localhost:3001/uploads/${comment.foto_perfil}` : 'https://via.placeholder.com/30'}
+        alt="User"
+        className="comment-avatar"
+        style={{
+          width: '30px',
+          height: '30px',
+          borderRadius: '50%',
+          objectFit: 'cover',
+          marginRight: '10px'
+        }}
+      />
+      <div className="comment-body">
+        <strong>{comment.username}</strong>
+        <p style={{ margin: 0 }}>{comment.conteudo}</p>
+      </div>
+    </div>
+  ))}
+</div>
         </div>
     );
 }

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import CreatePost from '../CreatePost/CreatePost';
-import CommentSection from '../CommentSection/CommentSection'; // Corrigido aqui
+import CommentSection from '../CommentSection/CommentSection';
 import './PostList.css';
 
 export default function PostList() {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [openCommentsForPostId, setOpenCommentsForPostId] = useState(null); // estado para controlar comentário aberto
 
     const fetchPosts = async () => {
         try {
@@ -33,7 +34,15 @@ export default function PostList() {
     }, []);
 
     const handlePostCreated = () => {
-        fetchPosts(); // Atualiza a lista de posts quando um novo post é criado
+        fetchPosts();
+    };
+
+    const toggleComments = (postId) => {
+        if (openCommentsForPostId === postId) {
+            setOpenCommentsForPostId(null); // fecha os comentários se clicar de novo
+        } else {
+            setOpenCommentsForPostId(postId); // abre os comentários do post clicado
+        }
     };
 
     if (loading) return <div className="loading">Carregando postagens...</div>;
@@ -65,10 +74,12 @@ export default function PostList() {
                     </div>
                     <div className="post-actions">
                         <button className="action-button">👍 Curtir</button>
-                        <button className="action-button">💬 Comentar</button>
-                        <button className="action-button">↗️ Compartilhar</button>
+                        <button className="action-button" onClick={() => toggleComments(post.id)}>
+                            💬 Comentar
+                        </button>
                     </div>
-                    <CommentSection postId={post.id} /> {/* Aqui incluímos os comentários */}
+                    {/* Só renderiza a seção de comentários se o post estiver aberto */}
+                    {openCommentsForPostId === post.id && <CommentSection postId={post.id} />}
                 </div>
             ))}
         </div>
