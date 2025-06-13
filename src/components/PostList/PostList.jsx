@@ -75,7 +75,7 @@ export default function PostList() {
                     <div className="post-actions">
                         <button className="action-button">👍 Curtir</button>
                         <button className="action-button" onClick={() => toggleComments(post.id)}>
-                            💬 Comentar
+                            💬 Comentarios
                         </button>
                     </div>
                     {/* Só renderiza a seção de comentários se o post estiver aberto */}
