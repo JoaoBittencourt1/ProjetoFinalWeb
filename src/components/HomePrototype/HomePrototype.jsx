@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PostList from '../PostList/PostList';
 import './HomePrototype.css';
+import { FaUsers } from 'react-icons/fa';
 
 export default function HomePrototype() {
   const [showProfile, setShowProfile] = useState(false);
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
@@ -23,7 +26,12 @@ export default function HomePrototype() {
   return (
     <div className="home-wrapper">
       <header className="header">
-        <button className="home-button">🏠 Home</button>
+        <div className="left-buttons">
+          <button className="home-button">🏠 Home</button>
+          <button className="grupos-button" onClick={() => navigate('/grupos')}>
+            <FaUsers style={{ marginRight: '0.5rem' }} /> Grupos
+          </button>
+        </div>
         <div className="profile-section">
           <button className="profile-toggle" onClick={() => setShowProfile(!showProfile)}>
             {user?.profilePic ? (
