@@ -52,7 +52,10 @@ router.post('/', upload.single('imagem'), async (req, res) => {
   try {
     const { conteudo, tipo } = req.body;
     
-    const userId = 1;
+    const userId = req.session.userId;
+    if (!userId) {
+      return res.status(401).json({ error: 'Usuário não autenticado' });
+    }
 
     let conteudoFinal = conteudo;
     if (tipo === 'imagem' && req.file) {
