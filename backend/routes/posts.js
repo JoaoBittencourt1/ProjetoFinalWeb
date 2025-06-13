@@ -6,7 +6,7 @@ const path = require('path');
 
 
 const dbConfig = {
-  host: '179.251.251.198',
+  host: '179.251.17.221',
   user: 'usuariodb',
   password: 'Userdb123&',
   database: 'ProjetoWeb'
