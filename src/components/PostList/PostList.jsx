@@ -7,7 +7,7 @@ export default function PostList() {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [openCommentsForPostId, setOpenCommentsForPostId] = useState(null); // estado para controlar comentário aberto
+    const [openCommentsForPostId, setOpenCommentsForPostId] = useState(null);
 
     const fetchPosts = async () => {
         try {
@@ -38,10 +38,31 @@ export default function PostList() {
     };
 
     const toggleComments = (postId) => {
-        if (openCommentsForPostId === postId) {
-            setOpenCommentsForPostId(null); // fecha os comentários se clicar de novo
-        } else {
-            setOpenCommentsForPostId(postId); // abre os comentários do post clicado
+        setOpenCommentsForPostId(prev => (prev === postId ? null : postId));
+    };
+
+    const avaliarPost = async (postId, valor) => {
+        try {
+            const res = await fetch('http://localhost:3001/api/avaliacoes', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    tipo_alvo: 'postagem',
+                    id_alvo: postId,
+                    valor
+                })
+            });
+            if (res.ok) {
+                fetchPosts(); // Recarrega os posts atualizados
+            } else {
+                const data = await res.json();
+                console.error('Erro da API:', data);
+            }
+        } catch (err) {
+            console.error('Erro ao avaliar post:', err);
         }
     };
 
@@ -73,12 +94,17 @@ export default function PostList() {
                         )}
                     </div>
                     <div className="post-actions">
-                        <button className="action-button">👍 Curtir</button>
-                        <button className="action-button" onClick={() => toggleComments(post.id)}>
-                            💬 Comentarios
+                        <div className="vote-buttons">
+                            <button className="vote-button" onClick={() => avaliarPost(post.id, 'positivo')}>👍</button>
+                            <span className="vote-count">{post.likes || 0}</span>
+                            <button className="vote-button" onClick={() => avaliarPost(post.id, 'negativo')}>👎</button>
+                            <span className="vote-count">{post.dislikes || 0}</span>
+                        </div>
+                        <button className="comment-button" onClick={() => toggleComments(post.id)}>
+                            💬 Comentários
                         </button>
                     </div>
-                    {/* Só renderiza a seção de comentários se o post estiver aberto */}
+
                     {openCommentsForPostId === post.id && <CommentSection postId={post.id} />}
                 </div>
             ))}

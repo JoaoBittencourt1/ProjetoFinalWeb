@@ -71,11 +71,24 @@ app.use('/uploads', express.static(uploadDir));
 
 
 const dbConfig = {
-    host: '179.251.17.221',
+    host: '179.251.97.159',
     user: 'usuariodb',
     password: 'Userdb123&',
     database: 'ProjetoWeb',
 };
+
+// Testar conexão com o banco de dados
+(async() => {
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+        await connection.ping(); // Verifica se o banco responde
+        console.log('✅ Conexão com o banco de dados estabelecida com sucesso!');
+        await connection.end();
+    } catch (err) {
+        console.error('❌ Erro ao conectar com o banco de dados:', err);
+    }
+})();
+
 
 
 const authRoutes = require('./routes/auth');
@@ -98,3 +111,6 @@ app.listen(PORT, () => {
 
 const gruposRoutes = require('./routes/grupos');
 app.use('/api/grupos', gruposRoutes);
+
+const avaliacaoRoutes = require('./routes/avaliacoes');
+app.use('/api/avaliacoes', avaliacaoRoutes);
