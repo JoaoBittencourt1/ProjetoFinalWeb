@@ -16,15 +16,14 @@ export default function GruposCriar() {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include', // importante para manter a sessão
+        credentials: 'include',
         body: JSON.stringify({ nome, descricao }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        console.log('Grupo criado com sucesso:', data);
-        navigate('/grupos'); // Navegar para a lista de grupos
+        navigate('/grupos');
       } else {
         alert(data.message || 'Erro ao criar grupo');
       }
@@ -36,6 +35,10 @@ export default function GruposCriar() {
 
   return (
     <div className="grupo-criar-container">
+      <button className="grupo-voltar-button" onClick={() => navigate('/grupos')}>
+        ⬅ Voltar
+      </button>
+
       <h2>Criar Novo Grupo</h2>
       <form className="grupo-criar-form" onSubmit={handleSubmit}>
         <label>Nome do grupo:</label>

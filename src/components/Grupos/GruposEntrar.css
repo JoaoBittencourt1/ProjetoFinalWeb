@@ -34,3 +34,20 @@
 .grupos-entrar-item button:hover {
     background-color: #556cd6;
 }
+
+.entrar-voltar-button {
+    background-color: transparent;
+    color: #667eea;
+    border: 2px solid #667eea;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.entrar-voltar-button:hover {
+    background-color: #667eea;
+    color: white;
+}

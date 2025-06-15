@@ -21,6 +21,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+// Rota para buscar postagens globais (se quiser manter)
 router.get('/', async(req, res) => {
     try {
         const connection = await mysql.createConnection(dbConfig);
@@ -58,7 +59,7 @@ router.get('/', async(req, res) => {
     }
 });
 
-
+// Rota para criar postagens globais (se quiser manter)
 router.post('/', upload.single('imagem'), async(req, res) => {
     try {
         const { conteudo, tipo } = req.body;
@@ -89,5 +90,85 @@ router.post('/', upload.single('imagem'), async(req, res) => {
         res.status(500).json({ error: 'Erro ao criar post' });
     }
 });
+
+// NOVA ROTA - Buscar mensagens de um grupo específico
+router.get('/grupo-mensagens/:grupoId', async(req, res) => {
+    const { grupoId } = req.params;
+
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+
+        const [mensagens] = await connection.execute(
+            `SELECT gm.*, u.username, u.foto_perfil
+             FROM grupo_mensagens gm
+             JOIN usuarios u ON gm.id_usuario = u.id
+             WHERE gm.id_grupo = ?
+             ORDER BY gm.data_criacao DESC`, [grupoId]
+        );
+
+        await connection.end();
+
+        res.json(mensagens);
+    } catch (error) {
+        console.error('Erro ao buscar mensagens do grupo:', error);
+        res.status(500).json({ message: 'Erro ao buscar mensagens do grupo' });
+    }
+});
+
+// Rota para criar mensagem no grupo
+router.post('/grupo-mensagens', async(req, res) => {
+    try {
+        const { grupoId, conteudo } = req.body;
+        const userId = req.session.userId;
+
+        if (!userId) {
+            return res.status(401).json({ error: 'Usuário não autenticado' });
+        }
+        if (!grupoId || !conteudo) {
+            return res.status(400).json({ error: 'Grupo e conteúdo são obrigatórios' });
+        }
+
+        const connection = await mysql.createConnection(dbConfig);
+
+        const [result] = await connection.execute(
+            'INSERT INTO grupo_mensagens (id_grupo, id_usuario, conteudo) VALUES (?, ?, ?)', [grupoId, userId, conteudo]
+        );
+
+        await connection.end();
+
+        res.status(201).json({
+            id: result.insertId,
+            message: 'Mensagem criada com sucesso'
+        });
+    } catch (error) {
+        console.error('Erro ao criar mensagem do grupo:', error);
+        res.status(500).json({ error: 'Erro ao criar mensagem do grupo' });
+    }
+});
+
+// Rota para pegar mensagens do grupo pelo ID
+router.get('/grupo-mensagens/:grupoId', async(req, res) => {
+    const { grupoId } = req.params;
+
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+
+        const [mensagens] = await connection.execute(
+            `SELECT gm.id, gm.conteudo, gm.data_criacao, u.username, u.foto_perfil
+       FROM grupo_mensagens gm
+       JOIN usuarios u ON gm.id_usuario = u.id
+       WHERE gm.id_grupo = ?
+       ORDER BY gm.data_criacao DESC`, [grupoId]
+        );
+
+        await connection.end();
+
+        res.json(mensagens);
+    } catch (error) {
+        console.error('Erro ao buscar mensagens do grupo:', error);
+        res.status(500).json({ error: 'Erro ao buscar mensagens do grupo' });
+    }
+});
+
 
 module.exports = router;

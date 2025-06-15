@@ -1,0 +1,94 @@
+.home-wrapper {
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    background-color: #f0f2f5;
+}
+
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    top: 0;
+    z-index: 10;
+}
+
+.home-button {
+    background: none;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+}
+
+.profile-section {
+    position: relative;
+}
+
+.profile-toggle {
+    background: none;
+    color: white;
+    font-size: 1.4rem;
+    border: none;
+    cursor: pointer;
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: 2.5rem;
+    right: 0;
+    background-color: white;
+    color: #333;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+    text-align: center;
+}
+
+.profile-dropdown img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-bottom: 0.5rem;
+}
+
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #667eea;
+}
+
+.profile-dropdown-pic {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border: 3px solid #667eea;
+}
+
+.main-content {
+    padding: 2rem;
+    text-align: center;
+}
+
+.left-buttons {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.grupos-button {
+    background: none;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
