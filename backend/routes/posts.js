@@ -5,12 +5,13 @@ const multer = require('multer');
 const path = require('path');
 
 const dbConfig = {
-    host: '179.251.97.159',
+    host: '179.251.253.17',
     user: 'usuariodb',
     password: 'Userdb123&',
     database: 'ProjetoWeb'
 };
 
+// Configuração do multer para upload de imagens
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, path.join(__dirname, '../uploads')),
     filename: (req, file, cb) => {
@@ -21,7 +22,11 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Rota para buscar postagens globais (se quiser manter)
+/* ===============================
+   ROTAS DE POSTAGENS (Globais e de Grupo)
+================================ */
+
+// Buscar postagens globais
 router.get('/', async(req, res) => {
     try {
         const connection = await mysql.createConnection(dbConfig);
@@ -47,11 +52,11 @@ router.get('/', async(req, res) => {
                 WHERE tipo_alvo = 'postagem' AND valor = 'negativo' 
                 GROUP BY id_alvo
             ) AS dislikes ON dislikes.id_alvo = p.id
+            WHERE p.id_grupo IS NULL
             ORDER BY p.data_criacao DESC
         `);
 
         await connection.end();
-
         res.json(posts);
     } catch (error) {
         console.error('Erro ao buscar postagens:', error);
@@ -59,10 +64,10 @@ router.get('/', async(req, res) => {
     }
 });
 
-// Rota para criar postagens globais (se quiser manter)
+// Criar post global ou de grupo (com imagem se houver)
 router.post('/', upload.single('imagem'), async(req, res) => {
     try {
-        const { conteudo, tipo } = req.body;
+        const { conteudo, tipo, id_grupo } = req.body;
         const userId = req.session.userId;
 
         if (!userId) {
@@ -75,9 +80,16 @@ router.post('/', upload.single('imagem'), async(req, res) => {
         }
 
         const connection = await mysql.createConnection(dbConfig);
-        const [result] = await connection.execute(
-            'INSERT INTO postagens (id_usuario, conteudo, tipo) VALUES (?, ?, ?)', [userId, conteudoFinal, tipo]
-        );
+
+        const query = id_grupo ?
+            'INSERT INTO postagens (id_usuario, conteudo, tipo, id_grupo) VALUES (?, ?, ?, ?)' :
+            'INSERT INTO postagens (id_usuario, conteudo, tipo) VALUES (?, ?, ?)';
+
+        const params = id_grupo ?
+            [userId, conteudoFinal, tipo, id_grupo] :
+            [userId, conteudoFinal, tipo];
+
+        const [result] = await connection.execute(query, params);
 
         await connection.end();
 
@@ -91,23 +103,63 @@ router.post('/', upload.single('imagem'), async(req, res) => {
     }
 });
 
-// NOVA ROTA - Buscar mensagens de um grupo específico
-router.get('/grupo-mensagens/:grupoId', async(req, res) => {
-    const { grupoId } = req.params;
-
+// Buscar posts de um grupo específico
+router.get('/grupo/:id_grupo', async(req, res) => {
+    const { id_grupo } = req.params;
     try {
         const connection = await mysql.createConnection(dbConfig);
 
-        const [mensagens] = await connection.execute(
-            `SELECT gm.*, u.username, u.foto_perfil
-             FROM grupo_mensagens gm
-             JOIN usuarios u ON gm.id_usuario = u.id
-             WHERE gm.id_grupo = ?
-             ORDER BY gm.data_criacao DESC`, [grupoId]
-        );
+        const [rows] = await connection.execute(`
+            SELECT 
+                p.*, 
+                u.username, 
+                u.foto_perfil,
+                IFNULL(likes.likes, 0) AS likes,
+                IFNULL(dislikes.dislikes, 0) AS dislikes
+            FROM postagens p
+            JOIN usuarios u ON p.id_usuario = u.id
+            LEFT JOIN (
+                SELECT id_alvo, COUNT(*) AS likes 
+                FROM avaliacoes 
+                WHERE tipo_alvo = 'postagem' AND valor = 'positivo' 
+                GROUP BY id_alvo
+            ) AS likes ON likes.id_alvo = p.id
+            LEFT JOIN (
+                SELECT id_alvo, COUNT(*) AS dislikes 
+                FROM avaliacoes 
+                WHERE tipo_alvo = 'postagem' AND valor = 'negativo' 
+                GROUP BY id_alvo
+            ) AS dislikes ON dislikes.id_alvo = p.id
+            WHERE p.id_grupo = ?
+            ORDER BY p.data_criacao DESC
+        `, [id_grupo]);
 
         await connection.end();
+        res.json(rows);
+    } catch (error) {
+        console.error('Erro ao buscar posts por grupo:', error);
+        res.status(500).json({ error: 'Erro ao buscar posts por grupo' });
+    }
+});
 
+/* ===============================
+   MENSAGENS DE GRUPO
+================================ */
+
+// Buscar mensagens de grupo
+router.get('/grupo-mensagens/:grupoId', async(req, res) => {
+    const { grupoId } = req.params;
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+        const [mensagens] = await connection.execute(`
+            SELECT gm.*, u.username, u.foto_perfil
+            FROM grupo_mensagens gm
+            JOIN usuarios u ON gm.id_usuario = u.id
+            WHERE gm.id_grupo = ?
+            ORDER BY gm.data_criacao DESC
+        `, [grupoId]);
+
+        await connection.end();
         res.json(mensagens);
     } catch (error) {
         console.error('Erro ao buscar mensagens do grupo:', error);
@@ -115,7 +167,7 @@ router.get('/grupo-mensagens/:grupoId', async(req, res) => {
     }
 });
 
-// Rota para criar mensagem no grupo
+// Criar mensagem no grupo
 router.post('/grupo-mensagens', async(req, res) => {
     try {
         const { grupoId, conteudo } = req.body;
@@ -129,13 +181,11 @@ router.post('/grupo-mensagens', async(req, res) => {
         }
 
         const connection = await mysql.createConnection(dbConfig);
-
         const [result] = await connection.execute(
             'INSERT INTO grupo_mensagens (id_grupo, id_usuario, conteudo) VALUES (?, ?, ?)', [grupoId, userId, conteudo]
         );
 
         await connection.end();
-
         res.status(201).json({
             id: result.insertId,
             message: 'Mensagem criada com sucesso'
@@ -145,30 +195,5 @@ router.post('/grupo-mensagens', async(req, res) => {
         res.status(500).json({ error: 'Erro ao criar mensagem do grupo' });
     }
 });
-
-// Rota para pegar mensagens do grupo pelo ID
-router.get('/grupo-mensagens/:grupoId', async(req, res) => {
-    const { grupoId } = req.params;
-
-    try {
-        const connection = await mysql.createConnection(dbConfig);
-
-        const [mensagens] = await connection.execute(
-            `SELECT gm.id, gm.conteudo, gm.data_criacao, u.username, u.foto_perfil
-       FROM grupo_mensagens gm
-       JOIN usuarios u ON gm.id_usuario = u.id
-       WHERE gm.id_grupo = ?
-       ORDER BY gm.data_criacao DESC`, [grupoId]
-        );
-
-        await connection.end();
-
-        res.json(mensagens);
-    } catch (error) {
-        console.error('Erro ao buscar mensagens do grupo:', error);
-        res.status(500).json({ error: 'Erro ao buscar mensagens do grupo' });
-    }
-});
-
 
 module.exports = router;

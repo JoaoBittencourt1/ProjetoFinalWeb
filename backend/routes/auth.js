@@ -6,7 +6,7 @@ const multer = require('multer');
 const path = require('path');
 
 const dbConfig = {
-    host: '179.251.97.159',
+    host: '179.251.253.17',
     user: 'usuariodb',
     password: 'Userdb123&',
     database: 'ProjetoWeb'

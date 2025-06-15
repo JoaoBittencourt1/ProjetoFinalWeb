@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-// Importar GrupoMensagens
-import GrupoMensagens from './GrupoMensagens/GrupoMensagens';
-
-import './HomePrototype.css';
+import { useParams, useNavigate } from 'react-router-dom';
 import { FaUsers } from 'react-icons/fa';
+import GrupoPostList from '../GrupoPostList/GrupoPostList';
+import './HomePrototype.css';
+import GrupoPostForm from '../GrupoPostList/GrupoPostForm'; // reutiliza estilo do HomePrototype
 
 export default function GrupoHome() {
+  const { id_grupo } = useParams();
+  const [grupo, setGrupo] = useState(null);
   const [showProfile, setShowProfile] = useState(false);
   const [user, setUser] = useState(null);
-  const [grupoSelecionado, setGrupoSelecionado] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,20 +19,36 @@ export default function GrupoHome() {
       setUser({
         name: parsedUser.username,
         email: parsedUser.email,
-        profilePic: parsedUser.foto_perfil
+        profilePic: parsedUser.foto_perfil 
           ? `http://localhost:3001/uploads/${parsedUser.foto_perfil}`
           : 'https://via.placeholder.com/50'
       });
     }
+  }, []);
 
-    // Carrega o grupo selecionado do localStorage
-    const grupoData = localStorage.getItem('grupoSelecionado');
-    if (grupoData) {
-      setGrupoSelecionado(JSON.parse(grupoData));
-    } else {
-      navigate('/grupos');
-    }
-  }, [navigate]);
+  useEffect(() => {
+    const fetchGrupo = async () => {
+      try {
+        const res = await fetch(`http://localhost:3001/api/grupos/grupo/${id_grupo}`, {
+          credentials: 'include'
+        });
+        const data = await res.json();
+        if (res.ok) {
+          setGrupo(data);
+        } else {
+          console.error('Erro do servidor:', data.message || data.error);
+        }
+      } catch (err) {
+        console.error('Erro no fetchGrupo:', err);
+      }
+    };
+
+    fetchGrupo();
+  }, [id_grupo]);
+
+  if (!grupo) {
+    return <div style={{ textAlign: 'center', marginTop: '100px' }}>Carregando grupo...</div>;
+  }
 
   return (
     <div className="home-wrapper">
@@ -46,9 +62,9 @@ export default function GrupoHome() {
         <div className="profile-section">
           <button className="profile-toggle" onClick={() => setShowProfile(!showProfile)}>
             {user?.profilePic ? (
-              <img
-                src={user.profilePic}
-                alt="Foto de perfil"
+              <img 
+                src={user.profilePic} 
+                alt="Foto de perfil" 
                 className="profile-pic"
               />
             ) : (
@@ -57,9 +73,9 @@ export default function GrupoHome() {
           </button>
           {showProfile && user && (
             <div className="profile-dropdown">
-              <img
-                src={user.profilePic}
-                alt="Foto de perfil"
+              <img 
+                src={user.profilePic} 
+                alt="Foto de perfil" 
                 className="profile-dropdown-pic"
               />
               <p><strong>{user.name}</strong></p>
@@ -68,18 +84,10 @@ export default function GrupoHome() {
           )}
         </div>
       </header>
-
       <main className="main-content">
-        {grupoSelecionado ? (
-          <>
-            <h2>{grupoSelecionado.nome}</h2>
-            <p>{grupoSelecionado.descricao}</p>
-            {/* Mostrar mensagens só do grupo */}
-            <GrupoMensagens grupoId={grupoSelecionado.id} />
-          </>
-        ) : (
-          <p style={{ color: 'red' }}>Grupo não selecionado.</p>
-        )}
+        <h1 style={{ textAlign: 'center' }}>{grupo.nome}</h1>
+        <GrupoPostForm grupoId={id_grupo} onPostCreated={() => window.location.reload()} />
+        <GrupoPostList grupoId={id_grupo} />
       </main>
     </div>
   );

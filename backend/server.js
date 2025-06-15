@@ -71,7 +71,7 @@ app.use('/uploads', express.static(uploadDir));
 
 
 const dbConfig = {
-    host: '179.251.97.159',
+    host: '179.251.253.17',
     user: 'usuariodb',
     password: 'Userdb123&',
     database: 'ProjetoWeb',
@@ -114,3 +114,6 @@ app.use('/api/grupos', gruposRoutes);
 
 const avaliacaoRoutes = require('./routes/avaliacoes');
 app.use('/api/avaliacoes', avaliacaoRoutes);
+
+const grupoPostsRouter = require('./routes/grupoPosts');
+app.use('/api/grupo-posts', grupoPostsRouter);

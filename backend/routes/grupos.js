@@ -3,7 +3,7 @@ const router = express.Router();
 const mysql = require('mysql2/promise');
 
 const dbConfig = {
-    host: '179.251.97.159',
+    host: '179.251.253.17',
     user: 'usuariodb',
     password: 'Userdb123&',
     database: 'ProjetoWeb',
@@ -120,23 +120,24 @@ router.get('/meus', verificarAutenticacao, async(req, res) => {
 });
 
 // Verificar se usuário pode acessar o grupo
-router.get('/entrar/:id_grupo', verificarAutenticacao, async(req, res) => {
+router.get('/grupo/:id_grupo', verificarAutenticacao, async(req, res) => {
     const id_grupo = req.params.id_grupo;
-    const id_usuario = req.session.userId;
+
     try {
         const conn = await mysql.createConnection(dbConfig);
-        const [rows] = await conn.execute('SELECT * FROM grupo_membros WHERE id_usuario = ? AND id_grupo = ?', [id_usuario, id_grupo]);
+        const [rows] = await conn.execute('SELECT id, nome, descricao FROM grupos WHERE id = ?', [id_grupo]);
         await conn.end();
 
         if (rows.length === 0) {
-            return res.status(403).json({ message: 'Você não tem permissão para acessar este grupo.' });
+            return res.status(404).json({ message: 'Grupo não encontrado.' });
         }
 
-        res.status(200).json({ message: 'Acesso autorizado ao grupo.' });
+        res.status(200).json(rows[0]);
     } catch (error) {
-        console.error('Erro ao verificar acesso ao grupo:', error);
-        res.status(500).json({ message: 'Erro interno ao verificar acesso.' });
+        console.error('Erro ao buscar grupo por ID:', error);
+        res.status(500).json({ message: 'Erro ao buscar grupo.' });
     }
 });
+
 
 module.exports = router;
