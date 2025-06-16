@@ -31,6 +31,9 @@ export default function HomePrototype() {
           <button className="grupos-button" onClick={() => navigate('/grupos')}>
             <FaUsers style={{ marginRight: '0.5rem' }} /> Grupos
           </button>
+          <button className="usuarios-button" onClick={() => navigate('/usuarios')}>
+  👥 Ver Usuários
+</button>
         </div>
         <div className="profile-section">
           <button className="profile-toggle" onClick={() => setShowProfile(!showProfile)}>
@@ -44,6 +47,7 @@ export default function HomePrototype() {
               '👤'
             )}
           </button>
+          
           {showProfile && user && (
             <div className="profile-dropdown">
               <img 

@@ -92,3 +92,11 @@
     display: flex;
     align-items: center;
 }
+
+.usuarios-button{
+    background: none;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+}

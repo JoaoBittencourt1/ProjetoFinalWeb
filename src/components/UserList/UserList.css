@@ -1,0 +1,112 @@
+.user-list-container {
+  padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 2rem auto;
+}
+
+.user-list-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #333;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f9f9f9;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  justify-content: space-between;
+}
+
+
+.user-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-info img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;         /* Mantém proporções e preenche o espaço */
+  border-radius: 50%;        /* Círculo perfeito */
+  border: 2px solid #4a90e2;
+  flex-shrink: 0;            /* Evita que a imagem encolha em layouts flex */
+  background-color: #eee;    /* Cor de fundo padrão para caso falhe */
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-details .username {
+  font-weight: 600;
+  color: #333;
+}
+
+.user-details .email {
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.connect-button {
+  padding: 0.5rem 1rem;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.connect-button:hover {
+  background-color: #357ab8;
+}
+
+.connect-button.connected {
+  background-color: #7ed957;
+  cursor: default;
+}
+
+.connect-button.connected:hover {
+  background-color: #7ed957;
+}
+
+.user-avatar {
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  background-color: #eee;
+  border: 2px solid #4a90e2;
+}
+
+.back-home-button {
+  margin-bottom: 1rem;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+.back-home-button:hover {
+  background-color: #357ABD;
+}

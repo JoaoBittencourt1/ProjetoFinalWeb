@@ -7,6 +7,7 @@ import GruposCriar from './components/Grupos/GruposCriar';
 import GruposEntrar from './components/Grupos/GruposEntrar';
 import PrivateRoute from './components/PrivateRoute';
 import GrupoHome from './components/Grupos/GrupoHome';
+import UserList from './components/UserList/UserList';
 
 export default function App() {
     return (
@@ -28,6 +29,7 @@ export default function App() {
                 <Route path="/grupos-criar" element={<GruposCriar />} />
                 <Route path="/grupo/:id_grupo" element={<GrupoHome />} />
                 <Route path="*" element={<Navigate to="/login" replace />} />
+                <Route path="/usuarios" element={<UserList />} />
             </Routes>
         </Router>
     );
