@@ -32,7 +32,7 @@ export default function LoginContainer() {
 
             localStorage.setItem('user', JSON.stringify(data.user));
 
-            navigate('/home-prototype');
+            navigate('/home');
         } catch (err) {
             setError(err.message);
             alert(err.message);

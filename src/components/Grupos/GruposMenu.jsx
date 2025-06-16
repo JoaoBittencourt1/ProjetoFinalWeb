@@ -8,7 +8,7 @@ export default function GruposMenu() {
   return (
     <div className="grupos-menu-page">
       <div className="grupos-menu-header">
-  <button className="home-back-button" onClick={() => navigate('/home-prototype')}>
+  <button className="home-back-button" onClick={() => navigate('/home')}>
     🏠 Home
   </button>
 </div>

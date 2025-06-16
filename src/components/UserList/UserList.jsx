@@ -20,7 +20,7 @@ export default function UserList() {
         const usuariosFiltrados = data.filter(usuario => usuario.id !== idUsuarioAtual);
         setUsuarios(usuariosFiltrados);
 
-        // Aqui seria ideal buscar conexões do usuário atual, se desejar mostrar conexões pré-existentes
+        
         setConectados(new Set());
       } catch (error) {
         console.error('Erro ao buscar usuários:', error);
@@ -51,7 +51,7 @@ export default function UserList() {
     <div className="user-list">
       <button 
         className="back-home-button" 
-        onClick={() => navigate('/home-prototype')} // ajuste a rota se necessário
+        onClick={() => navigate('/home')} 
       >
         ← Voltar para Home
       </button>

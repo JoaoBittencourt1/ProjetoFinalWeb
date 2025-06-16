@@ -17,7 +17,7 @@ export default function App() {
                 <Route path="/login" element={<LoginContainer />} />
                 <Route path="/register" element={<RegisterContainer />} />
                 <Route 
-                    path="/home-prototype" 
+                    path="/home" 
                     element={
                         <PrivateRoute>
                             <HomePrototype />
