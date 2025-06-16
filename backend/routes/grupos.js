@@ -9,7 +9,7 @@ const dbConfig = {
     database: 'ProjetoWeb',
 };
 
-// Middleware para verificar autenticação
+
 function verificarAutenticacao(req, res, next) {
     if (!req.session || !req.session.userId) {
         return res.status(401).json({ message: 'Não autenticado' });
@@ -17,7 +17,7 @@ function verificarAutenticacao(req, res, next) {
     next();
 }
 
-// Criar grupo
+
 router.post('/criar', verificarAutenticacao, async(req, res) => {
     const { nome, descricao } = req.body;
     const id_usuario = req.session.userId;
@@ -41,7 +41,7 @@ router.post('/criar', verificarAutenticacao, async(req, res) => {
     }
 });
 
-// Participar do grupo
+
 router.post('/entrar', verificarAutenticacao, async(req, res) => {
     const { id_grupo } = req.body;
     const id_usuario = req.session.userId;
@@ -66,7 +66,7 @@ router.post('/entrar', verificarAutenticacao, async(req, res) => {
     }
 });
 
-// Sair do grupo
+
 router.post('/sair', verificarAutenticacao, async(req, res) => {
     const { id_grupo } = req.body;
     const id_usuario = req.session.userId;
@@ -86,7 +86,7 @@ router.post('/sair', verificarAutenticacao, async(req, res) => {
     }
 });
 
-// Listar todos os grupos
+
 router.get('/listar', async(req, res) => {
     try {
         const connection = await mysql.createConnection(dbConfig);
@@ -99,12 +99,12 @@ router.get('/listar', async(req, res) => {
     }
 });
 
-// Listar grupos do usuário
+
 router.get('/meus', verificarAutenticacao, async(req, res) => {
     const id_usuario = req.session.userId;
     try {
         const connection = await mysql.createConnection(dbConfig);
-        // Buscar dados completos do grupo, não só id
+        
         const [rows] = await connection.execute(`
             SELECT g.id, g.nome, g.descricao, gm.funcao
             FROM grupos g
@@ -119,7 +119,7 @@ router.get('/meus', verificarAutenticacao, async(req, res) => {
     }
 });
 
-// Verificar se usuário pode acessar o grupo
+
 router.get('/grupo/:id_grupo', verificarAutenticacao, async(req, res) => {
     const id_grupo = req.params.id_grupo;
 

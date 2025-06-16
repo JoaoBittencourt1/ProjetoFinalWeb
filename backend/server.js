@@ -9,7 +9,7 @@ const mysql = require('mysql2/promise');
 const app = express();
 const FRONTEND_ORIGIN = 'http://localhost:3000';
 
-// Configuração do banco de dados
+
 const dbConfig = {
     host: '179.251.253.17',
     user: 'usuariodb',
@@ -17,10 +17,10 @@ const dbConfig = {
     database: 'ProjetoWeb',
 };
 
-// Criar pool de conexões e usar como `db`
+
 const db = mysql.createPool(dbConfig);
 
-// Testar conexão com o banco
+
 (async () => {
     try {
         const connection = await mysql.createConnection(dbConfig);
@@ -32,7 +32,7 @@ const db = mysql.createPool(dbConfig);
     }
 })();
 
-// Middlewares de CORS e sessão
+
 app.use(cors({
     origin: FRONTEND_ORIGIN,
     credentials: true
@@ -50,7 +50,7 @@ app.use(session({
     }
 }));
 
-// Logs
+
 app.use((req, res, next) => {
     console.log(`${req.method} ${req.url}`);
     console.log('Session:', req.session);
@@ -60,7 +60,7 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Configuração de upload
+
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir);
@@ -77,9 +77,7 @@ const upload = multer({ storage });
 
 app.use('/uploads', express.static(uploadDir));
 
-// Rotas
 
-// Buscar todos os usuários cadastrados
 app.get('/api/usuarios', async (req, res) => {
     try {
         const [usuarios] = await db.query('SELECT id, username, email, foto_perfil FROM usuarios');
@@ -90,7 +88,7 @@ app.get('/api/usuarios', async (req, res) => {
     }
 });
 
-// Fazer conexão com outro usuário
+
 app.post('/api/conexoes', async (req, res) => {
     const { id_usuario2 } = req.body;
     const id_usuario1 = req.session.userId;
@@ -112,7 +110,7 @@ app.post('/api/conexoes', async (req, res) => {
     }
 });
 
-// Buscar conexões feitas pelo usuário logado
+
 app.get('/api/conexoes', async (req, res) => {
     const id_usuario1 = req.session.userId;
 
@@ -134,7 +132,7 @@ app.get('/api/conexoes', async (req, res) => {
     }
 });
 
-// Rotas importadas
+
 const authRoutes = require('./routes/auth');
 const postsRoutes = require('./routes/posts');
 const comentariosRoutes = require('./routes/comentarios');

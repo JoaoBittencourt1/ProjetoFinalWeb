@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mysql = require('mysql2/promise');
 
-// Configuração do banco de dados
+
 const dbConfig = {
     host: '179.251.253.17',
     user: 'usuariodb',
@@ -22,7 +22,7 @@ router.post('/', async(req, res) => {
     try {
         const conn = await mysql.createConnection(dbConfig);
 
-        // Insere ou atualiza a avaliação do usuário
+        
         const [result] = await conn.execute(`
             INSERT INTO avaliacoes (id_usuario, tipo_alvo, id_alvo, valor)
             VALUES (?, ?, ?, ?)

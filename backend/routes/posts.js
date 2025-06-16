@@ -11,7 +11,7 @@ const dbConfig = {
     database: 'ProjetoWeb'
 };
 
-// Configuração do multer para upload de imagens
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, path.join(__dirname, '../uploads')),
     filename: (req, file, cb) => {
@@ -22,11 +22,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-/* ===============================
-   ROTAS DE POSTAGENS (Globais e de Grupo)
-================================ */
 
-// Buscar postagens globais
 router.get('/', async(req, res) => {
     try {
         const connection = await mysql.createConnection(dbConfig);
@@ -64,7 +60,7 @@ router.get('/', async(req, res) => {
     }
 });
 
-// Criar post global ou de grupo (com imagem se houver)
+
 router.post('/', upload.single('imagem'), async(req, res) => {
     try {
         const { conteudo, tipo, id_grupo } = req.body;
@@ -103,7 +99,7 @@ router.post('/', upload.single('imagem'), async(req, res) => {
     }
 });
 
-// Buscar posts de um grupo específico
+
 router.get('/grupo/:id_grupo', async(req, res) => {
     const { id_grupo } = req.params;
     try {
@@ -142,11 +138,7 @@ router.get('/grupo/:id_grupo', async(req, res) => {
     }
 });
 
-/* ===============================
-   MENSAGENS DE GRUPO
-================================ */
 
-// Buscar mensagens de grupo
 router.get('/grupo-mensagens/:grupoId', async(req, res) => {
     const { grupoId } = req.params;
     try {
@@ -167,7 +159,7 @@ router.get('/grupo-mensagens/:grupoId', async(req, res) => {
     }
 });
 
-// Criar mensagem no grupo
+
 router.post('/grupo-mensagens', async(req, res) => {
     try {
         const { grupoId, conteudo } = req.body;

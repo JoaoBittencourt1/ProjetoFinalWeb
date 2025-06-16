@@ -1,4 +1,4 @@
-// backend/routes/grupoPosts.js
+
 const express = require('express');
 const router = express.Router();
 

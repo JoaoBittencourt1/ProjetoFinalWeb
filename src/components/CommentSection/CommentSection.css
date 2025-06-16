@@ -40,15 +40,12 @@
 
 .comment-avatar {
     width: 30px;
-    /* menor que 40px do post */
     height: 30px;
     border-radius: 50%;
     object-fit: cover;
     margin-right: 10px;
     flex-shrink: 0;
-    /* evitar que a imagem encolha */
     display: block;
-    /* garante o comportamento esperado */
 }
 
 .comment-body {

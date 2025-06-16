@@ -9,7 +9,7 @@ const dbConfig = {
     database: 'ProjetoWeb'
 };
 
-// Buscar comentários por ID do post
+
 router.get('/:postId', async(req, res) => {
     try {
         const { postId } = req.params;
@@ -46,7 +46,7 @@ router.get('/:postId', async(req, res) => {
     }
 });
 
-// Criar um novo comentário
+
 router.post('/', async(req, res) => {
     try {
         const { id_postagem, conteudo, id_comentario_pai = null } = req.body;

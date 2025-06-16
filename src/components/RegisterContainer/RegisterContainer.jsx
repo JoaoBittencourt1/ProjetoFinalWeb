@@ -61,8 +61,7 @@ export default function RegisterContainer() {
         body: formData,
         credentials: 'include'
       });
-  
-      // Verifique o tipo de conteúdo antes de tentar parsear JSON
+
       const contentType = response.headers.get('content-type');
       
       if (!contentType || !contentType.includes('application/json')) {

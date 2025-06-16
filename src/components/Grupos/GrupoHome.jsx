@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { FaUsers } from 'react-icons/fa';
 import GrupoPostList from '../GrupoPostList/GrupoPostList';
 import './HomePrototype.css';
-import GrupoPostForm from '../GrupoPostList/GrupoPostForm'; // reutiliza estilo do HomePrototype
+import GrupoPostForm from '../GrupoPostList/GrupoPostForm'; 
 
 export default function GrupoHome() {
   const { id_grupo } = useParams();

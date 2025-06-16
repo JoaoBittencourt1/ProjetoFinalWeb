@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './GrupoPostList.css';
 import '../PostList/PostList.css';
-import CommentSection from '../CommentSection/CommentSection'; // ⬅️ Caminho conforme sua estrutura
+import CommentSection from '../CommentSection/CommentSection'; 
 
 export default function GrupoPostList({ grupoId }) {
   const [posts, setPosts] = useState([]);
@@ -87,7 +87,7 @@ export default function GrupoPostList({ grupoId }) {
               </button>
             </div>
 
-            {/* Comentários (com form de novo comentário incluso) */}
+           
             {comentariosVisiveis[post.id] && (
               <CommentSection postId={post.id} />
             )}
