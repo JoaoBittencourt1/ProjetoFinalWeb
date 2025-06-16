@@ -11,7 +11,7 @@ const FRONTEND_ORIGIN = 'http://localhost:3000';
 
 
 const dbConfig = {
-    host: '179.251.253.17',
+    host: '177.149.92.88',
     user: 'usuariodb',
     password: 'Userdb123&',
     database: 'ProjetoWeb',

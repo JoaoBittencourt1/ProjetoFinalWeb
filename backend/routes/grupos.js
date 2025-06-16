@@ -3,10 +3,10 @@ const router = express.Router();
 const mysql = require('mysql2/promise');
 
 const dbConfig = {
-    host: '179.251.253.17',
+    host: '177.149.92.88',
     user: 'usuariodb',
     password: 'Userdb123&',
-    database: 'ProjetoWeb',
+    database: 'ProjetoWeb'
 };
 
 

@@ -54,7 +54,7 @@ export default function GrupoHome() {
     <div className="home-wrapper">
       <header className="header">
         <div className="left-buttons">
-          <button className="home-button" onClick={() => navigate('/home-prototype')}>🏠 Home</button>
+          <button className="home-button" onClick={() => navigate('/home')}>🏠 Home</button>
           <button className="grupos-button" onClick={() => navigate('/grupos')}>
             <FaUsers style={{ marginRight: '0.5rem' }} /> Grupos
           </button>
