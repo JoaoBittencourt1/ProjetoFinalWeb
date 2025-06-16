@@ -32,5 +32,5 @@ export default function App() {
                 <Route path="/usuarios" element={<UserList />} />
             </Routes>
         </Router>
-    );
+    );
 }
