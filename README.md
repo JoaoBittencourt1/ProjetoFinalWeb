@@ -5,13 +5,11 @@
 ## para rodar:
 
 ### frontend:
-
+- cd ProjetoFinalWeb
 - npm install 
 - npm start
 
 ### backend: 
 
 - cd backend
-- npm install
-- npm install multer
-- node index.js
+- node server.js
